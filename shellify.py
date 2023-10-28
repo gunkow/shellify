@@ -5,9 +5,9 @@ import argparse
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-def api_call(prompt):
+def api_call(prompt, gpt4_flag):
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-3.5-turbo" if not gpt4_flag else "gpt-4",
         messages=[
             {"role": "system", "content": "You are an app which outputs shell oneliners by given input.\
              output should be pure oneliner with no comments or newlines"},
@@ -16,12 +16,11 @@ def api_call(prompt):
     )
     return response
 
-def shellify(prompt):
+def shellify(prompt, gpt4_flag):
     
     dot_count = 0
-    # print("OPtional arg: ", optional_arg)
     with ThreadPoolExecutor() as executor:
-        future = executor.submit(api_call, prompt)
+        future = executor.submit(api_call, prompt, gpt4_flag)
         
         while not future.done():
             print(".", end="", flush=True)
@@ -37,10 +36,12 @@ def shellify(prompt):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate shell oneliners using GPT-4.')
+    parser.add_argument('gpt4_flag', type=int, choices=[4], nargs='?', default=None, help='An optional argument that can only be 4')
     parser.add_argument('prompt', type=str, help='A prompt describing what shell command you need')
     
     args = parser.parse_args()
     prompt = args.prompt
+    gpt4_flag = args.gpt4_flag
 
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
@@ -48,7 +49,7 @@ if __name__ == "__main__":
         exit(1)
     openai.api_key = api_key
     
-    oneliner = shellify(prompt)
+    oneliner = shellify(prompt, gpt4_flag)
     
     if oneliner:
         print(f"{oneliner}")
