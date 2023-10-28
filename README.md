@@ -14,4 +14,6 @@ Set API key: `export OPENAI_API_KEY="your-key"`
 
 Usage:
 Run `./shellify.py "Count lines .txt files in dir"`
+
+
 output: `find . -type f -name '*.txt' | wc -l`
