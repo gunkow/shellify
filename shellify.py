@@ -5,9 +5,7 @@ import argparse
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-
-def api_call(prompt, api_key):
-    openai.api_key = api_key
+def api_call(prompt):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -19,23 +17,17 @@ def api_call(prompt, api_key):
     return response
 
 def shellify(prompt):
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        print("Error: OPENAI_API_KEY environment variable not set.")
-        return
     
-    dot_count = 0  # Initialize the count of printed dots
-    
+    dot_count = 0
+    # print("OPtional arg: ", optional_arg)
     with ThreadPoolExecutor() as executor:
-        future = executor.submit(api_call, prompt, api_key)
+        future = executor.submit(api_call, prompt)
         
-        # Print dots while waiting for the API call to complete
         while not future.done():
             print(".", end="", flush=True)
-            dot_count += 1  # Increment the count of printed dots
+            dot_count += 1
             time.sleep(1)
         
-        # Clear the printed dots
         print("\r" + " " * dot_count, end="", flush=True)
         
         response = future.result()
@@ -49,6 +41,12 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     prompt = args.prompt
+
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        print("Error: OPENAI_API_KEY environment variable not set.")
+        exit(1)
+    openai.api_key = api_key
     
     oneliner = shellify(prompt)
     
