@@ -24,18 +24,23 @@ def shellify(prompt):
         print("Error: OPENAI_API_KEY environment variable not set.")
         return
     
+    dot_count = 0  # Initialize the count of printed dots
+    
     with ThreadPoolExecutor() as executor:
         future = executor.submit(api_call, prompt, api_key)
         
         # Print dots while waiting for the API call to complete
         while not future.done():
             print(".", end="", flush=True)
+            dot_count += 1  # Increment the count of printed dots
             time.sleep(1)
-            
+        
+        # Clear the printed dots
+        print("\r" + " " * dot_count, end="", flush=True)
+        
         response = future.result()
-    
+
     shell_command = response['choices'][0]['message']['content']
-    print()  # Add a newline after the dots
     return shell_command
 
 if __name__ == "__main__":
