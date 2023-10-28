@@ -1,7 +1,7 @@
 # shellify
 
 Overview
-Generates shell oneliners using OpenAI's GPT-4.
+Generates shell oneliners using OpenAI's GPT(3.5).
 
 Requirements:
 - Python 3.x
