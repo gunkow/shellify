@@ -16,8 +16,8 @@ Usage:
 Run `./shellify.py "Count lines .txt files in dir"`
 
 
-or create shortcut: `ln -s ~/bin/shellify/shellify.py /usr/local/bin/shy` <br>
+or create shortcut: `ln -s path/to/shellify.py /usr/local/bin/shy` <br> Run:
 `shy "Count lines .txt files in dir"`
 
 
-output: `find . -type f -name '*.txt' | wc -l`
+Output:<br> `find . -type f -name '*.txt' | wc -l`
