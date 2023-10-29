@@ -3,6 +3,7 @@ import openai
 import os
 import argparse
 import time
+import pyperclip
 from concurrent.futures import ThreadPoolExecutor
 
 def api_call(prompt, gpt4_flag):
@@ -53,3 +54,4 @@ if __name__ == "__main__":
     
     if oneliner:
         print(f"{oneliner}")
+        pyperclip.copy(oneliner)
